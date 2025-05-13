@@ -1,6 +1,9 @@
 export const initialStore=()=>{
   return{
     message: null,
+    email:"",
+    password:"",
+    token:"",
     todos: [
       {
         id: 1,
@@ -23,7 +26,21 @@ export default function storeReducer(store, action = {}) {
         ...store,
         message: action.payload
       };
-      
+      case 'addEmail':
+      return {
+        ...store,
+       email: action.value
+      };
+     case 'addPassword':
+      return {
+        ...store,
+       password: action.value
+      };
+       case 'addToken':
+      return {
+        ...store,
+       token: action.value
+      };
     case 'add_task':
 
       const { id,  color } = action.payload
