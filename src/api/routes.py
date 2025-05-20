@@ -36,24 +36,31 @@ def public_route():
 
     return jsonify(response_body), 200
 
+@api.route('/user', methods=['GET'])
+def get_user():
+    raw_list_user=User.query.all()
+    users_list=[users.serialize() for users in raw_list_user]
+    return jsonify(users_list), 
+
+
 
 @api.route('/private', methods=['GET'])
 @jwt_required()
 def private_route():
     user_id = get_jwt_identity()
     user = User.query.get(user_id)
-    response_body = {
-        "message": f"Welcome user:{user.email}, esta es tu area PRIVADA"
-    }
+    
 
-    return jsonify(response_body), 200
+    return jsonify({
+        "confirmation":True,
+        "user":user.serialize()}), 200
+
 
 
 @api.route('/user/login', methods=["POST"])
 def sing_in():
     data_request = request.get_json()
    
-
     if not 'email' in data_request or not 'password' in data_request:
         return jsonify({"error": "Los campos: email y password son requeridos"}), 400
 
@@ -66,8 +73,8 @@ def sing_in():
      
         access_token = create_access_token(identity=str(user.id))
         return jsonify({
-            "token": access_token,
-            "user": user.serialize()
+            "user":user.serialize(),
+            "token": access_token
       }), 200
     except Exception as e:
         print(e)
@@ -78,11 +85,11 @@ def sing_in():
 @api.route('/user/create', methods=["POST"])
 def create_user():
     data_request = request.get_json()
-  
+
 
     if not 'email' in data_request or not 'password' in data_request:
         return jsonify({"error": "Los campos: email y password son requeridos"}), 400
-
+    
     new_user = User(
         email=data_request["email"],
         password=bcrypt.generate_password_hash(
@@ -97,5 +104,5 @@ def create_user():
     except Exception as e:
         print(e)
         db.session.rollback()
-        return jsonify({"error": "Error en el servido"}), 500
+        return jsonify({"error": "Error en el servidor"}), 500
 

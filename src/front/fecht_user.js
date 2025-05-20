@@ -17,7 +17,6 @@
                 body: JSON.stringify(user)
             })
             const response = await request.json();
-            console.log(response)
             return response
         } catch (error) {
             console.log(error)
@@ -29,7 +28,7 @@
         let user = {
              "email": `${email}`, "password": `${pass}`
         };
-        console.log(user)
+        
         try {
             const request = await fetch(`${Url}/login`, {
                 method: "POST",
@@ -37,6 +36,24 @@
                     "content-Type": "application/json"
                 },
                 body: JSON.stringify(user)
+            })
+            const response = await request.json();
+            
+            return response
+        } catch (error) {
+            console.log(error)
+            return error
+
+        }
+    },
+    privateareauser: async (token) => {
+        try {
+            const request = await fetch("https://literate-spoon-x5vj4v74wq65299rj-3001.app.github.dev/api/private", {
+                method: "GET", 
+                 headers: {
+                    "Authorization": `Bearer  ${token}`
+                },
+               
             })
             const response = await request.json();
             console.log(response)
@@ -47,23 +64,19 @@
 
         }
     },
-    privateareauser: async (token) => {
-        
+     getUser: async (id) => {
         try {
-            const request = await fetch(`https://literate-spoon-x5vj4v74wq65299rj-3001.app.github.dev/api/private`, {
-                method: "GET", 
-                 headers: {
-                    "Authorization": `Bearer ${token}`
-                },
-               
+            const request = await fetch(`${Url}/user/${id}`, {
+                method: "GET"
             })
             const response = await request.json();
+            console.log(response)
             return response
         } catch (error) {
             console.log(error)
             return error
 
         }
-    }
+    },
 
     }
