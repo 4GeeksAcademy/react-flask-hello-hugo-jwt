@@ -1,34 +1,69 @@
-import React, { useEffect } from "react";
+
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import { users } from "../fecht_user.js";
 import swal from "sweetalert";
-import { Await, json, useNavigate } from "react-router-dom";
-import storeReducer from "../store.js";
-import { PrivateRoutes } from "./privateroute.jsx";
+import { useNavigate } from "react-router-dom";
+
+
+
+
 export const Home = () => {
   const { store, dispatch } = useGlobalReducer();
   const history = useNavigate();
   const handleNavigate = () => history("/demo");
-
+  const handleNavigatelogin = () => history("/");
   const handleCreatuser = async () => {
     try {
       const data = await users.createuser(store.email, store.password);
-
+      if ((data.msg )) {
+        swal({
+          title: "NUEVO USUARIO CREADO",
+          text: `${data.msg}`,
+          icon: "success",
+          buttons: true,
+        });
+        handleNavigate()
+      }else if (data.msg==="El mail o la contraseña es incorrecto"){
+         swal({
+          title: "ERROR",
+          text: `${data.error}`,
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        });
+      }
+       else {
+        swal({
+          title: "ERROR",
+          text: `${data.error}`,
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        });
+      }
       console.log(data);
-    } catch (error) {}
+    } catch (error) {
+      
+    }
   };
 
   const handleLogingUser = async () => {
     try {
       const data = await users.loginguser(store.email, store.password);
       console.log(data);
-       if(data.token) {
-        await
-        dispatch({ type: "addToken", value: data.token });
-        await
-         dispatch({ type: "add_user", value: data.user });
-       }   
-        
+      if ((typeof data.token === "string" && data.token.length > 0)) {
+        await dispatch({ type: "addToken", value: data.token });
+        await dispatch({ type: "add_user", value: data.user });
+        handleNavigate()
+      }else if (data.msg==="El mail o la contraseña es incorrecto"){
+         swal({
+          title: "ERROR",
+          text: `${data.error}`,
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        });
+      }
        else {
         swal({
           title: "ERROR",
@@ -38,7 +73,7 @@ export const Home = () => {
           dangerMode: true,
         });
       }
-      return data
+      return data;
     } catch (error) {}
   };
  
@@ -76,8 +111,8 @@ export const Home = () => {
   const logingUser = async () => {
     if (store.email !== "" && store.password !== "") {
       const dataLogin= await handleLogingUser();
-      handleNavigate()
-      //checkToken()
+      
+     
       
      
     // if (dataLogin.validToken) {

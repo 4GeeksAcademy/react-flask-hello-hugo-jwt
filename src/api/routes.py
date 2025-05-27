@@ -50,10 +50,9 @@ def private_route():
     user_id = get_jwt_identity()
     user = User.query.get(user_id)
     
+    
 
-    return jsonify({
-        "confirmation":True,
-        "user":user.serialize()}), 200
+    return jsonify({"msg":True}), 200
 
 
 
@@ -100,7 +99,7 @@ def create_user():
     try:
         db.session.add(new_user)
         db.session.commit()
-        return jsonify({"msg": "Se creo el usuario"}), 201
+        return jsonify({"msg": "Usuario creado correctamente. Acceda desde login con su usuario y credenciales"}), 201
     except Exception as e:
         print(e)
         db.session.rollback()

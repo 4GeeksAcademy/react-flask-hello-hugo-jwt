@@ -8,7 +8,7 @@ export const Demo = () => {
    console.log(store.todos)
   return (
     <div className="container">
-      <h1>te veo</h1>
+      <h1>Bien venido a tu area privada.</h1>
       <ul className="list-group">
         {/* Map over the 'todos' array from the store and render each item as a list element */}
         {store && store.todos?.map((item) => {
@@ -21,14 +21,14 @@ export const Demo = () => {
               {/* Link to the detail page of this todo. */}
               <Link to={"/single/" + item.id}>Link to: {item.email} </Link>
               
-              <p>Open file ./store.js to see the global store that contains and updates the list of colors</p>
+              <p>DESDE AQUI PODRAS ACCEDER A TODOS TUS SERVICIOS </p>
               
               <button className="btn btn-success" 
                 onClick={() => dispatch({
                   type: "add_task", 
                   payload: { id: item.id, color: '#ffa500' }
                 })}>
-                Change Color
+                ACCEDER A SERVICIOS
               </button>
             </li>
           );
