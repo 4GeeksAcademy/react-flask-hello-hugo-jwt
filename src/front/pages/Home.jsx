@@ -15,7 +15,12 @@ export const Home = () => {
   const handleCreatuser = async () => {
     try {
       const data = await users.createuser(store.email, store.password);
-      if ((data.msg )) {
+
+      if ((typeof data.token === "string" && data.token.length > 0)) {
+        await dispatch({ type: "addToken", value: data.token });
+        await dispatch({ type: "add_user", value: data.user });
+        handleNavigate() }
+      if ((data.msg)) {
         swal({
           title: "NUEVO USUARIO CREADO",
           text: `${data.msg}`,
@@ -23,8 +28,8 @@ export const Home = () => {
           buttons: true,
         });
         handleNavigate()
-      }else if (data.msg==="El mail o la contraseña es incorrecto"){
-         swal({
+      } else if (data.msg === "El mail o la contraseña es incorrecto") {
+        swal({
           title: "ERROR",
           text: `${data.error}`,
           icon: "warning",
@@ -32,7 +37,7 @@ export const Home = () => {
           dangerMode: true,
         });
       }
-       else {
+      else {
         swal({
           title: "ERROR",
           text: `${data.error}`,
@@ -43,7 +48,7 @@ export const Home = () => {
       }
       console.log(data);
     } catch (error) {
-      
+
     }
   };
 
@@ -55,8 +60,8 @@ export const Home = () => {
         await dispatch({ type: "addToken", value: data.token });
         await dispatch({ type: "add_user", value: data.user });
         handleNavigate()
-      }else if (data.msg==="El mail o la contraseña es incorrecto"){
-         swal({
+      } else if (data.msg === "El mail o la contraseña es incorrecto") {
+        swal({
           title: "ERROR",
           text: `${data.error}`,
           icon: "warning",
@@ -64,7 +69,7 @@ export const Home = () => {
           dangerMode: true,
         });
       }
-       else {
+      else {
         swal({
           title: "ERROR",
           text: `${data.msg}`,
@@ -74,11 +79,11 @@ export const Home = () => {
         });
       }
       return data;
-    } catch (error) {}
+    } catch (error) { }
   };
- 
+
   const handleprivate = async () => {
-    console.log('store',store)
+    console.log('store', store)
     try {
       const data = await users.privateareauser(store.token);
       if (data.confirmation) {
@@ -100,7 +105,7 @@ export const Home = () => {
           dangerMode: true,
         });
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const createContact = async () => {
@@ -110,60 +115,121 @@ export const Home = () => {
   };
   const logingUser = async () => {
     if (store.email !== "" && store.password !== "") {
-      const dataLogin= await handleLogingUser();
-      
-     
-      
-     
-    // if (dataLogin.validToken) {
-    //    await handleprivate();
-    //  }
+      const dataLogin = await handleLogingUser();
+
+
+
+
+      // if (dataLogin.validToken) {
+      //    await handleprivate();
+      //  }
     }
-   
+
   };
 
   console.log(store.todos)
   return (
     <div className="text-center mt-5">
-      <h1 className="title">Wellcome</h1>
-      <div className="log mt-5">
-        <label className="form-label">Enter Email</label>
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Enter Email"
-          value={store.email}
-          onChange={(e) =>
-            dispatch({ type: "addEmail", value: e.target.value })
-          }
-        />
-        <label className="form-label">Enter Password</label>
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Enter Password"
-          value={store.password}
-          onChange={(e) =>
-            dispatch({ type: "addPassword", value: e.target.value })
-          }
-        />
-        <button
-          type="button"
-          id="formButton"
-          className="btn btn-primary mt-5"
-          onClick={createContact}
-        >
-          Register
-        </button>
-        <button
-          type="button"
-          id="formButton"
-          className="btn btn-primary mt-5"
-          onClick={logingUser}
-        >
-          Login
-        </button>
+      <div style={{ display: `${store.login}`}}>
+        <h1 className="title">Wellcome to login</h1>
+        <div className="log mt-5">
+          <label className="form-label">Enter Email</label>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Enter Email"
+            value={store.email}
+            onChange={(e) =>
+              dispatch({ type: "addEmail", value: e.target.value })
+            }
+          />
+          <label className="form-label">Enter Password</label>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Enter Password"
+            value={store.password}
+            onChange={(e) =>
+              dispatch({ type: "addPassword", value: e.target.value })
+            }
+          />
+          <button
+            type="button"
+            id="formButton"
+            className="btn btn-primary mt-5"
+             onClick={() => {
+               dispatch({
+                      type: "login",
+                      value: "none",
+                    })
+                    dispatch({
+                      type: "register",
+                      value: "",
+                    })
+                  }}>
+            Go to Register
+          </button>
+          <button
+            type="button"
+            id="formButton"
+            className="btn btn-primary mt-5"
+            onClick={logingUser}
+          >
+            Login
+          </button>
+        </div>
+      </div>
+
+      <div className="register" style={{ display: `${store.register}`}}>
+        <h1 className="title">Wellcome to register</h1>
+        <div className="log mt-5">
+          <label className="form-label">Enter Email</label>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Enter Email"
+            value={store.email}
+            onChange={(e) =>
+              dispatch({ type: "addEmail", value: e.target.value })
+            }
+          />
+          <label className="form-label">Enter Password</label>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Enter Password"
+            value={store.password}
+            onChange={(e) =>
+              dispatch({ type: "addPassword", value: e.target.value })
+            }
+          />
+          <button
+            type="button"
+            id="formButton"
+            className="btn btn-primary mt-5"
+            onClick={createContact}
+          >
+            Register
+          </button>
+          <button
+            type="button"
+            id="formButton"
+            className="btn btn-primary mt-5"
+           onClick={() => {
+               dispatch({
+                      type: "login",
+                      value: "",
+                    })
+                    dispatch({
+                      type: "register",
+                      value: "none",
+                    })
+                  }}>
+            Back to Login
+          </button>
+        </div>
       </div>
     </div>
+
   );
 };

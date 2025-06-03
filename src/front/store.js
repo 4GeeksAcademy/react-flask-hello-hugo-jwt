@@ -6,6 +6,8 @@ export const initialStore = () => {
     token: "",
     validToken: false,
     todos: [],
+    login: "",
+    register: "none"
   };
 };
 
@@ -25,6 +27,16 @@ export default function storeReducer(store, action = {}) {
       return {
         ...store,
         email: action.value,
+      };
+      case "login":
+      return {
+        ...store,
+        login: action.value,
+      };
+      case "register":
+      return {
+        ...store,
+        register: action.value,
       };
     case "addPassword":
       return {

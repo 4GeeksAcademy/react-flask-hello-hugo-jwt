@@ -99,7 +99,10 @@ def create_user():
     try:
         db.session.add(new_user)
         db.session.commit()
-        return jsonify({"msg": "Usuario creado correctamente. Acceda desde login con su usuario y credenciales"}), 201
+        access_token = create_access_token(identity=str(new_user.id))
+        return jsonify({"msg": "Usuario creado correctamente. Acceda desde login con su usuario y credenciales",
+                        "token":access_token,
+                        "user":new_user.serialize()}), 201
     except Exception as e:
         print(e)
         db.session.rollback()
